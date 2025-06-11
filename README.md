@@ -7,8 +7,6 @@ REST API in Go for querying Ethereum consensus and execution layer data, specifi
 - **Block Reward Endpoint**: Retrieves block rewards and determines if a block was built by MEV builders
 - **Sync Duties Endpoint**: Returns validator public keys with sync committee duties for a given slot
 - Clean architecture with minimal abstractions
-- Proper error handling and graceful shutdown
-- Environment-based configuration
 
 ## Architecture
 
@@ -35,7 +33,7 @@ REST API in Go for querying Ethereum consensus and execution layer data, specifi
 ## Prerequisites
 
 - Go 1.24 or higher
-- Access to an Ethereum RPC endpoint (QuickNode URL provided as default)
+- Access to an Ethereum RPC endpoint
 
 ## Installation
 
@@ -68,13 +66,9 @@ go build -o ethereum-validator-api
 
 ## Configuration
 
-The API uses a configuration module that reads from both `.env` file and environment variables. Environment variables take precedence over `.env` file values.
-
-### Available Configuration Options
-
 Create a `.env` file in the project root (see `.env.example` for reference):
 
-```env
+```bash
 # Server Configuration
 PORT=8080
 
@@ -82,30 +76,14 @@ PORT=8080
 ETH_RPC_URL=https://your-rpc-endpoint.com
 ```
 
-Configuration priority:
-1. System environment variables (highest priority)
-2. `.env` file values
-3. Default values (lowest priority)
-
-Example with environment variable override:
-```bash
-# Using .env file
-./ethereum-validator-api
-
-# Override with environment variable
-export ETH_RPC_URL="https://different-endpoint.com"
-./ethereum-validator-api
-```
-
 ## Running the API
 
 ### Development
 ```bash
+# Development
 go run main.go
-```
 
-### Production
-```bash
+# Production
 ./ethereum-validator-api
 ```
 
@@ -153,6 +131,12 @@ make docker-build
 
 # Run Docker container
 make docker-run
+
+# Start Docker container
+make up
+
+# Stop Docker container
+make down
 ```
 
 The Docker container exposes port 8080 and uses the ETH_RPC_URL environment variable for configuration.
@@ -241,13 +225,14 @@ curl localhost:8080/blockreward/invalid | jq .
 curl localhost:8080/blockreward/99999999 | jq .
 ```
 
+## Test with Postman
+
+Import the Postman collection from `api_docs/Ethereum Validator API.postman_collection.json`.
+
 ## Implementation Details
 
 ### MEV Detection Heuristic
-A block is classified as "MEV" if:
-- The execution payload's `fee_recipient` differs from the proposer's withdrawal credentials address
-
-Otherwise, it's classified as "VANILLA".
+A block is classified as "MEV" if: The execution payload's `fee_recipient` differs from the proposer's withdrawal credentials address. Otherwise, it's classified as "VANILLA".
 
 ### Reward Calculation
 Block reward is calculated as:
@@ -274,12 +259,6 @@ All errors follow this JSON structure:
 
 ## Testing
 
-Run unit tests:
-```bash
-go test ./...
-```
-
-Run with verbose output:
 ```bash
 go test -v ./...
 ```
@@ -304,3 +283,7 @@ go test -v ./...
 - Add metrics and monitoring endpoints
 - Support for multiple RPC endpoints with fallback
 - WebSocket support for real-time updates
+
+## License
+
+MIT

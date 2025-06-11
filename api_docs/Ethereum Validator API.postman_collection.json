@@ -1,0 +1,299 @@
+{
+	"info": {
+		"_postman_id": "d536b9f6-220a-48f3-9035-a7fbb2c1b96a",
+		"name": "Ethereum Validator API",
+		"description": "Ethereum Block Reward and Sync Duties API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "838562"
+	},
+	"item": [
+		{
+			"name": "Block Reward",
+			"item": [
+				{
+					"name": "Get Block Reward - Valid Slot",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/blockreward/7847950",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"blockreward",
+								"7847950"
+							]
+						},
+						"description": "Returns block reward and MEV status for a given slot"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"status\": \"VANILLA\",\n  \"reward\": 32518\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Block Reward - Invalid Slot",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/blockreward/invalid",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"blockreward",
+								"invalid"
+							]
+						},
+						"description": "Example of invalid slot format"
+					},
+					"response": [
+						{
+							"name": "Invalid Slot Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"error\": \"Invalid slot number\",\n  \"code\": 400\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Block Reward - Future Slot",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/blockreward/99999999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"blockreward",
+								"99999999"
+							]
+						},
+						"description": "Example of slot in the future"
+					},
+					"response": [
+						{
+							"name": "Future Slot Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"error\": \"Slot is in the future\",\n  \"code\": 400\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Block Reward - Missing Block",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/blockreward/1000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"blockreward",
+								"1000"
+							]
+						},
+						"description": "Example of slot with missing block"
+					},
+					"response": [
+						{
+							"name": "Block Not Found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"error\": \"Block not found for slot\",\n  \"code\": 404\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Sync Duties",
+			"item": [
+				{
+					"name": "Get Sync Duties - Valid Slot",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/syncduties/7847950",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"syncduties",
+								"7847950"
+							]
+						},
+						"description": "Returns array of validator pubkeys with sync committee duties"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "[\n  \"0x93247f2209abcacf57b75a51dafae777f9dd38bc7053d1af526f220a7489a6d3a2753e5f3e8b1cfe39b56f43611df74a\",\n  \"0xa572cbea904d67468808c8eb50a9450c9721db309128012543902d0ac358a62ae28f75bb8f1c7c42c39a8c5529bf0f4e\",\n  \"0x89ece308f9d1f0131765212deca99697b112d61f9be9a5f1f3780a51335b3ff981747a0b2ca2179b96d2c0c9024e5224\"\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Sync Duties - Invalid Slot",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/syncduties/abc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"syncduties",
+								"abc"
+							]
+						},
+						"description": "Example of invalid slot format"
+					},
+					"response": [
+						{
+							"name": "Invalid Slot Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"error\": \"Invalid slot number\",\n  \"code\": 400\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Sync Duties - Slot Too Far in Future",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/syncduties/99999999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"syncduties",
+								"99999999"
+							]
+						},
+						"description": "Example of slot more than 1 epoch in the future"
+					},
+					"response": [
+						{
+							"name": "Slot Too Far Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n  \"error\": \"Slot is too far in the future\",\n  \"code\": 400\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "validSlot",
+			"value": "7847950",
+			"type": "string"
+		}
+	]
+}

@@ -59,4 +59,3 @@ up:
 # Stop and remove Docker containers
 down:
 	docker stop ethereum-validator-api
-	docker rm ethereum-validator-api
