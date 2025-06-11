@@ -53,8 +53,10 @@ dev:
 
 # Run Docker container with everything built and running
 up:
-	docker-compose up -d || docker compose up -d
+	make docker-build
+	make docker-run
 
 # Stop and remove Docker containers
 down:
-	docker-compose down || docker compose down
+	docker stop ethereum-validator-api
+	docker rm ethereum-validator-api
