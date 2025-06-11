@@ -144,10 +144,25 @@ func (c *Client) GetValidator(index string) (*ValidatorResponse, error) {
 
 // GetExecutionBlock retrieves an execution layer block
 func (c *Client) GetExecutionBlock(blockNumber string) (*Block, error) {
+	// Ensure block number is in hex format with 0x prefix
+	formattedBlockNumber := blockNumber
+	
+	// If it doesn't start with 0x, it's likely a decimal string
+	if !strings.HasPrefix(blockNumber, "0x") {
+		// Parse the decimal string to a big.Int
+		bn := new(big.Int)
+		_, success := bn.SetString(blockNumber, 10)
+		if !success {
+			return nil, fmt.Errorf("invalid block number format: %s", blockNumber)
+		}
+		// Convert to hex with 0x prefix
+		formattedBlockNumber = "0x" + bn.Text(16)
+	}
+
 	params := map[string]interface{}{
 		"jsonrpc": "2.0",
 		"method":  "eth_getBlockByNumber",
-		"params":  []interface{}{blockNumber, true},
+		"params":  []interface{}{formattedBlockNumber, true},
 		"id":      1,
 	}
 
