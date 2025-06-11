@@ -84,6 +84,13 @@ func (h *Handler) GetBlockReward(c *gin.Context) {
 	// Get execution block
 	executionBlock, err := h.client.GetExecutionBlock(beaconBlock.Data.Message.Body.ExecutionPayload.BlockNumber)
 	if err != nil {
+		if strings.Contains(err.Error(), "not found") || err.Error() == "RPC error: Block not found" || executionBlock == nil {
+			c.JSON(http.StatusNotFound, ErrorResponse{
+				Error: "Execution block not found",
+				Code:  http.StatusNotFound,
+			})
+			return
+		}
 		c.JSON(http.StatusInternalServerError, ErrorResponse{
 			Error: "Failed to get execution block",
 			Code:  http.StatusInternalServerError,
